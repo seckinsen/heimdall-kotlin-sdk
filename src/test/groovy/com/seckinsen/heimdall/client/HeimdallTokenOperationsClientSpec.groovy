@@ -4,8 +4,10 @@ import com.seckinsen.heimdall.client.client.HeimdallTokenOperationsClient
 import com.seckinsen.heimdall.client.exception.HeimdallClientRequestNotSucceededException
 import com.seckinsen.heimdall.client.model.Credentials
 import com.seckinsen.heimdall.client.model.token.RefreshToken
+import org.junit.Ignore
 import spock.lang.Specification
 
+@Ignore
 class HeimdallTokenOperationsClientSpec extends Specification {
 
     private HeimdallTokenOperationsClient client

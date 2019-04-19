@@ -4,10 +4,12 @@ import com.seckinsen.heimdall.client.client.HeimdallUserOperationsClient
 import com.seckinsen.heimdall.client.exception.HeimdallClientRequestNotSucceededException
 import com.seckinsen.heimdall.client.model.Credentials
 import com.seckinsen.heimdall.client.model.user.*
+import org.junit.Ignore
 import spock.lang.Specification
 
 import java.time.LocalDate
 
+@Ignore
 class HeimdallUserOperationsClientSpec extends Specification {
 
     private HeimdallUserOperationsClient client
