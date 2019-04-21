@@ -28,9 +28,10 @@ class HeimdallUserOperationsClientSpec extends Specification {
         and:
         def userName = "trial-user007@heimdall.io"
         def password = "trial-user007"
-        def audiences = ["heimdall-aud"].toSet()
         def roles = ["ROLE_USER"].toSet()
-        def request = new UserCreateRequest(userName, password, audiences, roles, null)
+        def audiences = ["heimdall-aud"].toSet()
+        def scopes = ["read", "write"].toSet()
+        def request = new UserCreateRequest(userName, password, roles, audiences, scopes, null)
 
         when:
         def response = client.createUser(credentials, request)
@@ -41,6 +42,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         response.user.password == password
         response.user.authorities.containsAll(roles)
         response.user.audiences.containsAll(audiences)
+        response.user.scopes.containsAll(scopes)
         response.user.validity.status == UserStatus.ACTIVE
         response.user.validity.expiryDate == null
     }
@@ -52,9 +54,10 @@ class HeimdallUserOperationsClientSpec extends Specification {
         and:
         def userName = "trial-user008@heimdall.io"
         def password = "trial-user008"
-        def audiences = ["heimdall-aud"].toSet()
         def roles = ["ROLE_USER"].toSet()
-        def request = new UserCreateRequest(userName, password, audiences, roles, null)
+        def audiences = ["heimdall-aud"].toSet()
+        def scopes = ["read", "write"].toSet()
+        def request = new UserCreateRequest(userName, password, roles, audiences, scopes, null)
 
         when:
         client.createUser(credentials, request)
@@ -70,10 +73,11 @@ class HeimdallUserOperationsClientSpec extends Specification {
         and:
         def userName = "trial-user010@heimdall.io"
         def password = "trial-user010"
-        def audiences = ["heimdall-aud"].toSet()
         def roles = ["ROLE_USER"].toSet()
+        def audiences = ["heimdall-aud"].toSet()
+        def scopes = ["read", "write"].toSet()
         def expiryDate = LocalDate.now().plusMonths(3)
-        def request = new UserCreateRequest(userName, password, audiences, roles, expiryDate)
+        def request = new UserCreateRequest(userName, password, roles, audiences, scopes, expiryDate)
 
         when:
         def response = client.createUser(credentials, request)
@@ -95,10 +99,11 @@ class HeimdallUserOperationsClientSpec extends Specification {
         and:
         def userName = "non-exist-user@heimdall.io"
         def password = "non-exist-user"
-        def audiences = ["heimdall-aud"].toSet()
         def roles = ["ROLE_USER"].toSet()
+        def audiences = ["heimdall-aud"].toSet()
+        def scopes = ["read", "write"].toSet()
         def expiryDate = LocalDate.now().minusDays(1)
-        def request = new UserCreateRequest(userName, password, audiences, roles, expiryDate)
+        def request = new UserCreateRequest(userName, password, roles, audiences, scopes, expiryDate)
 
         when:
         client.createUser(credentials, request)

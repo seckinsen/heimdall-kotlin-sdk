@@ -7,6 +7,7 @@ data class UserDetail(
     val password: String,
     val authorities: Collection<String>,
     val audiences: Collection<String>,
+    val scopes: Collection<String>,
     val validity: UserValidity,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime?,
