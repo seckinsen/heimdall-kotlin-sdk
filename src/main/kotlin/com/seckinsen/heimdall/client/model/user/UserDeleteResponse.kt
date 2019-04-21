@@ -1,3 +1,5 @@
 package com.seckinsen.heimdall.client.model.user
 
-data class UserDeleteResponse(val status: String, val code: String, val message: String)
+import com.seckinsen.heimdall.client.model.BaseResponse
+
+class UserDeleteResponse: BaseResponse()
