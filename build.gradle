@@ -5,6 +5,7 @@ buildscript {
         okhttp_version = '3.14.1'
         jackson_version = '2.9.8'
         commons_codec_version = '1.10'
+        apache_commons_lang_version = '3.0'
     }
 
     repositories {
@@ -51,6 +52,8 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:${jackson_version}"
 
     implementation "commons-codec:commons-codec:${commons_codec_version}"
+
+    implementation "org.apache.commons:commons-lang3:${apache_commons_lang_version}"
 
     implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
     implementation "org.slf4j:slf4j-simple:${slf4j_version}"

@@ -83,7 +83,4 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         }
     }
 
-    private fun AccessToken.toBearerAuthenticationHeader(): Map<String, String> =
-        mapOf("Authorization" to "Bearer ${this.token}")
-
 }

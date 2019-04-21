@@ -9,6 +9,8 @@ import spock.lang.Specification
 
 import java.time.LocalDate
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString
+
 @Ignore
 class HeimdallUserOperationsClientSpec extends Specification {
 
@@ -34,7 +36,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def response = client.createUser(credentials, request)
 
         then:
-        println "Response => $response"
+        println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
         response.user.password == password
         response.user.authorities.containsAll(roles)
@@ -77,7 +79,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def response = client.createUser(credentials, request)
 
         then:
-        println "Response => $response"
+        println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
         response.user.password == password
         response.user.authorities.containsAll(roles)
@@ -117,7 +119,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def response = client.deleteUser(credentials, request)
 
         then:
-        println "Response => $response"
+        println "Response => ${reflectionToString(response)}"
         response.status == "APPROVED"
     }
 
@@ -163,7 +165,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def response = client.activateUser(credentials, request)
 
         then:
-        println "Response => $response"
+        println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
         !response.user.deleted
     }
@@ -210,7 +212,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def response = client.getUser(credentials, request)
 
         then:
-        println "Response => $response"
+        println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
     }
 

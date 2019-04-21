@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.convertValue
 import com.seckinsen.heimdall.client.exception.HeimdallClientHttpCallFailedException
 import com.seckinsen.heimdall.client.exception.HeimdallClientRequestNotSucceededException
 import com.seckinsen.heimdall.client.model.Operation
+import com.seckinsen.heimdall.client.model.token.AccessToken
 import com.seckinsen.heimdall.client.model.token.RefreshToken
 import com.seckinsen.heimdall.client.model.token.TokenContext
 import com.seckinsen.heimdall.client.utils.http.OkHttpClientBuilder
@@ -108,11 +109,7 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
         val message = mapOf("code" to response.code(), "body" to responseBody)
 
         if (!response.isSuccessful)
-            throw HeimdallClientRequestNotSucceededException(
-                objectMapper.writeValueAsString(
-                    mapOf("message" to message)
-                )
-            )
+            throw HeimdallClientRequestNotSucceededException(objectMapper.writeValueAsString(mapOf("message" to message)))
 
         responseBody.also { logMe("RESPONSE", message) }
     }
@@ -124,6 +121,9 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
 
     private fun com.seckinsen.heimdall.client.model.Credentials.toBasicAuthenticationHeader(): Map<String, String> =
         mapOf("Authorization" to "Basic ${Base64.encodeBase64String("${this.username}:${this.password}".toByteArray())}")
+
+    protected fun AccessToken.toBearerAuthenticationHeader(): Map<String, String> =
+        mapOf("Authorization" to "Bearer ${this.token}")
 
     protected fun logMe(type: String, message: Map<String, Any>) {
         val context = mapOf("time" to LocalDateTime.now().toString(), "type" to type, "message" to message)
