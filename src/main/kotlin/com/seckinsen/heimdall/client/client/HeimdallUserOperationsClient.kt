@@ -83,4 +83,46 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         }
     }
 
+    fun resetUserPassword(credentials: Credentials, request: UserPasswordResetRequest): UserPasswordResetResponse =
+        getTokenContext(credentials)
+            .let { AccessToken.parse(it) }
+            .run { resetUserPassword(this, request) }
+
+    fun resetUserPassword(accessToken: AccessToken, request: UserPasswordResetRequest): UserPasswordResetResponse {
+        logMe(
+            Operation.USER_PASSWORD_RESET.name,
+            "[ ${request.userName} ] named user password reset operation attempt."
+        )
+
+        return execute(
+            request = request,
+            operation = Operation.USER_PASSWORD_RESET,
+            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            responseClass = UserPasswordResetResponse::class.java
+        ).also {
+            logMe(
+                Operation.USER_PASSWORD_RESET.name,
+                "[ ${request.userName} ] named user password reset operation succeeded."
+            )
+        }
+    }
+
+    fun changeUserPassword(credentials: Credentials, request: UserPasswordChangeRequest): UserPasswordChangeResponse =
+        getTokenContext(credentials)
+            .let { AccessToken.parse(it) }
+            .run { changeUserPassword(this, request) }
+
+    fun changeUserPassword(accessToken: AccessToken, request: UserPasswordChangeRequest): UserPasswordChangeResponse {
+        logMe(Operation.USER_PASSWORD_CHANGE.name, "user password reset operation attempt.")
+
+        return execute(
+            request = request,
+            operation = Operation.USER_PASSWORD_CHANGE,
+            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            responseClass = UserPasswordChangeResponse::class.java
+        ).also {
+            logMe(Operation.USER_PASSWORD_CHANGE.name, "user password reset operation succeeded.")
+        }
+    }
+
 }

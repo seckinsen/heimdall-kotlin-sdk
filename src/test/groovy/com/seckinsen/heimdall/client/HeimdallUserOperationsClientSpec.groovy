@@ -29,7 +29,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def userName = "trial-user007@heimdall.io"
         def password = "trial-user007"
         def roles = ["ROLE_USER"].toSet()
-        def audiences = ["heimdall-aud"].toSet()
+        def audiences = ["apis"].toSet()
         def scopes = ["read", "write"].toSet()
         def request = new UserCreateRequest(userName, password, roles, audiences, scopes, null)
 
@@ -55,7 +55,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def userName = "trial-user008@heimdall.io"
         def password = "trial-user008"
         def roles = ["ROLE_USER"].toSet()
-        def audiences = ["heimdall-aud"].toSet()
+        def audiences = ["apis"].toSet()
         def scopes = ["read", "write"].toSet()
         def request = new UserCreateRequest(userName, password, roles, audiences, scopes, null)
 
@@ -74,7 +74,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def userName = "trial-user010@heimdall.io"
         def password = "trial-user010"
         def roles = ["ROLE_USER"].toSet()
-        def audiences = ["heimdall-aud"].toSet()
+        def audiences = ["apis"].toSet()
         def scopes = ["read", "write"].toSet()
         def expiryDate = LocalDate.now().plusMonths(3)
         def request = new UserCreateRequest(userName, password, roles, audiences, scopes, expiryDate)
@@ -100,7 +100,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         def userName = "non-exist-user@heimdall.io"
         def password = "non-exist-user"
         def roles = ["ROLE_USER"].toSet()
-        def audiences = ["heimdall-aud"].toSet()
+        def audiences = ["apis"].toSet()
         def scopes = ["read", "write"].toSet()
         def expiryDate = LocalDate.now().minusDays(1)
         def request = new UserCreateRequest(userName, password, roles, audiences, scopes, expiryDate)
@@ -231,6 +231,74 @@ class HeimdallUserOperationsClientSpec extends Specification {
 
         when:
         client.activateUser(credentials, request)
+
+        then:
+        thrown HeimdallClientRequestNotSucceededException
+    }
+
+    def "exists user password reset attempt should succeeded"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "trial-user007@heimdall.io"
+        def password = "new-trial-user007"
+        def request = new UserPasswordResetRequest(userName, password)
+
+        when:
+        def response = client.resetUserPassword(credentials, request)
+
+        then:
+        println "Response => ${reflectionToString(response)}"
+        response.user.userName == userName
+        response.user.password == password
+        response.status == "APPROVED"
+    }
+
+    def "not exist user password reset attempt should succeeded"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "non-exist-user@heimdall.io"
+        def password = "new-non-exist-user"
+        def request = new UserPasswordResetRequest(userName, password)
+
+        when:
+        client.resetUserPassword(credentials, request)
+
+        then:
+        thrown HeimdallClientRequestNotSucceededException
+    }
+
+    def "exists user password change attempt should succeeded"() {
+        given:
+        def userName = "trial-user007@heimdall.io"
+        def password = "trial-user007"
+        def newPassword = "new-trial-user007"
+        def credentials = new Credentials(userName, password)
+        def request = new UserPasswordChangeRequest(newPassword)
+
+        when:
+        def response = client.changeUserPassword(credentials, request)
+
+        then:
+        println "Response => ${reflectionToString(response)}"
+        response.user.userName == userName
+        response.user.password == newPassword
+        response.status == "APPROVED"
+    }
+
+    def "not exist user password change attempt should succeeded"() {
+        given:
+        def userName = "non-exist-user@heimdall.io"
+        def password = "non-exist-user"
+        def newPassword = "new-non-exist-user"
+        def credentials = new Credentials(userName, password)
+        def request = new UserPasswordChangeRequest(newPassword)
+
+        when:
+        client.changeUserPassword(credentials, request)
 
         then:
         thrown HeimdallClientRequestNotSucceededException
