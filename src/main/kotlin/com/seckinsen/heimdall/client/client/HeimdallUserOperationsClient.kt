@@ -125,4 +125,40 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         }
     }
 
+    fun lockUser(credentials: Credentials, request: UserLockRequest): UserLockResponse =
+        getTokenContext(credentials)
+            .let { AccessToken.parse(it) }
+            .run { lockUser(this, request) }
+
+    fun lockUser(accessToken: AccessToken, request: UserLockRequest): UserLockResponse {
+        logMe(Operation.USER_LOCK.name, "[ ${request.userName} ] named user lock operation attempt.")
+
+        return execute(
+            request = request,
+            operation = Operation.USER_LOCK,
+            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            responseClass = UserLockResponse::class.java
+        ).also {
+            logMe(Operation.USER_LOCK.name, "[ ${request.userName} ] named user lock operation succeeded.")
+        }
+    }
+
+    fun unlockUser(credentials: Credentials, request: UserUnlockRequest): UserUnlockResponse =
+        getTokenContext(credentials)
+            .let { AccessToken.parse(it) }
+            .run { unlockUser(this, request) }
+
+    fun unlockUser(accessToken: AccessToken, request: UserUnlockRequest): UserUnlockResponse {
+        logMe(Operation.USER_UNLOCK.name, "[ ${request.userName} ] named user unlock operation attempt.")
+
+        return execute(
+            request = request,
+            operation = Operation.USER_UNLOCK,
+            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            responseClass = UserUnlockResponse::class.java
+        ).also {
+            logMe(Operation.USER_UNLOCK.name, "[ ${request.userName} ] named user unlock operation succeeded.")
+        }
+    }
+
 }

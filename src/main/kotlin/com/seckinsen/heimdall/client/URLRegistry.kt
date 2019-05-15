@@ -15,7 +15,9 @@ class URLRegistry(private val baseUrl: String) {
         Operation.USER_AUTHORITY_ADD to "/api/v1/account/authority/add",
         Operation.USER_AUTHORITY_DELETE to "/api/v1/account/authority/delete",
         Operation.USER_PASSWORD_RESET to "/api/v1/account/user/password/reset",
-        Operation.USER_PASSWORD_CHANGE to "/api/v1/account/user/password/change"
+        Operation.USER_PASSWORD_CHANGE to "/api/v1/account/user/password/change",
+        Operation.USER_LOCK to "/api/v1/account/user/lock",
+        Operation.USER_UNLOCK to "/api/v1/account/user/unlock"
     )
 
     fun getURL(operation: Operation): URL =

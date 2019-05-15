@@ -172,6 +172,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         then:
         println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
+        isSanitized(response.user.password)
         !response.user.deleted
     }
 
@@ -219,6 +220,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         then:
         println "Response => ${reflectionToString(response)}"
         response.user.userName == userName
+        isSanitized(response.user.password)
     }
 
     def "not exist user get attempt should throw exception"() {
@@ -255,7 +257,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         response.status == "APPROVED"
     }
 
-    def "not exist user password reset attempt should succeeded"() {
+    def "not exist user password reset attempt should throw exception"() {
         given:
         def credentials = 'retrieve admin user credentials'()
 
@@ -289,7 +291,7 @@ class HeimdallUserOperationsClientSpec extends Specification {
         response.status == "APPROVED"
     }
 
-    def "not exist user password change attempt should succeeded"() {
+    def "not exist user password change attempt should throw exception"() {
         given:
         def userName = "non-exist-user@heimdall.io"
         def password = "non-exist-user"
@@ -304,8 +306,76 @@ class HeimdallUserOperationsClientSpec extends Specification {
         thrown HeimdallClientRequestNotSucceededException
     }
 
+    def "exists user lock attempt should succeeded"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "trial-user007@heimdall.io"
+        def request = new UserLockRequest(userName)
+
+        when:
+        def response = client.lockUser(credentials, request)
+
+        then:
+        println "Response => ${reflectionToString(response)}"
+        response.status == "APPROVED"
+    }
+
+    def "not exist user lock attempt should throw exception"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "non-exist-user@heimdall.io"
+        def request = new UserLockRequest(userName)
+
+        when:
+        client.lockUser(credentials, request)
+
+        then:
+        thrown HeimdallClientRequestNotSucceededException
+    }
+
+    def "exists user unlock attempt should succeeded"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "trial-user007@heimdall.io"
+        def request = new UserUnlockRequest(userName)
+
+        when:
+        def response = client.unlockUser(credentials, request)
+
+        then:
+        println "Response => ${reflectionToString(response)}"
+        response.user.userName == userName
+        isSanitized(response.user.password)
+        response.status == "APPROVED"
+    }
+
+    def "not exist user unlock attempt should throw exception"() {
+        given:
+        def credentials = 'retrieve admin user credentials'()
+
+        and:
+        def userName = "non-exist-user@heimdall.io"
+        def request = new UserUnlockRequest(userName)
+
+        when:
+        client.unlockUser(credentials, request)
+
+        then:
+        thrown HeimdallClientRequestNotSucceededException
+    }
+
     def "retrieve admin user credentials"() {
         return new Credentials("adminuser@heimdall.io", "XXX")
+    }
+
+    def isSanitized(String password) {
+        password.matches(/X+/)
     }
 
 }
