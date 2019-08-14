@@ -20,7 +20,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_CREATE,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserCreateResponse::class.java
         ).also { logMe(Operation.USER_CREATE.name, "[ ${request.userName} ] named user create operation succeeded.") }
     }
@@ -36,7 +36,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_DELETE,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserDeleteResponse::class.java
         ).also { logMe(Operation.USER_DELETE.name, "[ ${request.userName} ] named user delete operation succeeded.") }
     }
@@ -52,7 +52,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_ACTIVATE,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserActivateResponse::class.java
         ).also {
             logMe(
@@ -73,7 +73,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_GET,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserGetResponse::class.java
         ).also {
             logMe(
@@ -97,7 +97,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_PASSWORD_RESET,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserPasswordResetResponse::class.java
         ).also {
             logMe(
@@ -118,7 +118,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_PASSWORD_CHANGE,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserPasswordChangeResponse::class.java
         ).also {
             logMe(Operation.USER_PASSWORD_CHANGE.name, "user password reset operation succeeded.")
@@ -136,7 +136,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_LOCK,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserLockResponse::class.java
         ).also {
             logMe(Operation.USER_LOCK.name, "[ ${request.userName} ] named user lock operation succeeded.")
@@ -154,7 +154,7 @@ class HeimdallUserOperationsClient(baseUrl: String) : AbstractClient(URLRegistry
         return execute(
             request = request,
             operation = Operation.USER_UNLOCK,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = UserUnlockResponse::class.java
         ).also {
             logMe(Operation.USER_UNLOCK.name, "[ ${request.userName} ] named user unlock operation succeeded.")

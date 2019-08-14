@@ -26,7 +26,7 @@ class HeimdallAuthorityOperationsClient(baseUrl: String) : AbstractClient(URLReg
         return execute(
             request = request,
             operation = Operation.USER_AUTHORITY_ADD,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = AuthorityAddResponse::class.java
         ).also {
             logMe(
@@ -50,7 +50,7 @@ class HeimdallAuthorityOperationsClient(baseUrl: String) : AbstractClient(URLReg
         return execute(
             request = request,
             operation = Operation.USER_AUTHORITY_DELETE,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_JSON) + accessToken.toBearerAuthenticationHeader(),
             responseClass = AuthorityDeleteResponse::class.java
         ).also {
             logMe(

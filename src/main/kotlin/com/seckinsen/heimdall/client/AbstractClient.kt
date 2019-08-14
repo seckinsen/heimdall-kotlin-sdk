@@ -23,6 +23,8 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
     companion object {
         const val MEDIA_TYPE_FORM_ENCODED = "application/x-www-form-urlencoded"
         const val MEDIA_TYPE_JSON = "application/json"
+        const val CONTENT_TYPE_HEADER = "Content-Type"
+        const val AUTHORIZATION_HEADER = "Authorization"
     }
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -45,7 +47,7 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
         execute(
             request = mapOf("refreshToken" to refreshToken.token),
             operation = Operation.RENEW_TOKEN,
-            headers = mapOf("Content-Type" to MEDIA_TYPE_FORM_ENCODED),
+            headers = mapOf(CONTENT_TYPE_HEADER to MEDIA_TYPE_FORM_ENCODED),
             responseClass = TokenContext::class.java
         )
 
@@ -70,7 +72,7 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
         val body = request
             .also { logMe("REQUEST", mapOf("url" to url.toString(), "body" to it, "headers" to headers)) }
             .let {
-                when (headers["Content-Type"]) {
+                when (headers[CONTENT_TYPE_HEADER]) {
                     MEDIA_TYPE_FORM_ENCODED -> prepareFormRequestBody(request)
                     else -> prepareJsonRequestBody(request)
                 }
@@ -91,7 +93,7 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
             .build()
 
     private fun prepareJsonRequestBody(request: Map<String, Any>): RequestBody =
-        RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(request))
+        RequestBody.create(MediaType.parse(MEDIA_TYPE_JSON), objectMapper.writeValueAsString(request))
 
     private fun prepareHeaders(headers: Map<String, String>): Headers =
         Headers.Builder()
@@ -120,17 +122,12 @@ abstract class AbstractClient(private val URLRegistry: URLRegistry) {
         objectMapper.readValue(content, responseClass)
 
     private fun com.seckinsen.heimdall.client.model.Credentials.toBasicAuthenticationHeader(): Map<String, String> =
-        mapOf("Authorization" to "Basic ${Base64.encodeBase64String("${this.username}:${this.password}".toByteArray())}")
+        mapOf(AUTHORIZATION_HEADER to "Basic ${Base64.encodeBase64String("${this.username}:${this.password}".toByteArray())}")
 
     protected fun AccessToken.toBearerAuthenticationHeader(): Map<String, String> =
-        mapOf("Authorization" to "Bearer ${this.token}")
+        mapOf(AUTHORIZATION_HEADER to "Bearer ${this.token}")
 
-    protected fun logMe(type: String, message: Map<String, Any>) {
-        val context = mapOf("time" to LocalDateTime.now().toString(), "type" to type, "message" to message)
-        objectMapper.writeValueAsString(context).also { log.info(it) }
-    }
-
-    protected fun logMe(type: String, message: String) {
+    protected fun logMe(type: String, message: Any) {
         val context = mapOf("time" to LocalDateTime.now().toString(), "type" to type, "message" to message)
         objectMapper.writeValueAsString(context).also { log.info(it) }
     }
